@@ -325,7 +325,7 @@ class PipeRepository @Inject constructor(
                 val pipeOutflowInventoryRef = db.collection(PIPE_OUTFLOW_DB).document()
 
                 val newPipeOutflowEntry = mapOf(
-                    "inventoryId" to pipeOutflowInventoryRef,
+                    "inventoryId" to pipeOutflowInventoryRef.id,
                     "pipeInventoryId" to pipeInventoryId,
                     "pipeType" to pipeItem.pipeType,
                     "pipeSize" to pipeItem.pipeSize,

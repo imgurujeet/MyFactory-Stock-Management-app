@@ -164,7 +164,7 @@ fun PipeOutflowScreen(navHost: NavHostController,onBack: () -> Unit,viewModel: P
     Scaffold(
         topBar = {
             Box(
-                modifier = Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.statusBars).padding(horizontal = 16.dp)
+                modifier = Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.statusBars).padding(horizontal = 16.dp, vertical = 8.dp)
                     .padding(bottom = 8.dp)
             ){
                 Text(
