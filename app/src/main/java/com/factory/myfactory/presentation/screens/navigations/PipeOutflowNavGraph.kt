@@ -1,7 +1,12 @@
 package com.factory.myfactory.presentation.screens.navigations
 
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,7 +29,14 @@ fun PipeOutflowNavGraph(navController: NavHostController=rememberNavController()
     ){ innerPadding->
         NavHost(
             navController = navController,
-            startDestination = Screen.PipeOutflow.route
+            startDestination = Screen.PipeOutflow.route,
+            modifier = Modifier.padding(
+                top = innerPadding.calculateTopPadding(),
+                start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr)
+                // bottom is NOT applied
+            )
+
         ){
 
             composable(route = Screen.PipeOutflow.route){

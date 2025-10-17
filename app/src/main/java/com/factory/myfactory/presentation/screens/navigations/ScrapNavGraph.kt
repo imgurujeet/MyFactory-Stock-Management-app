@@ -1,9 +1,12 @@
 package com.factory.myfactory.presentation.screens.navigations
 
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,7 +27,12 @@ fun ScrapCutPieceNavGraph(navController: NavHostController = rememberNavControll
         NavHost(
             navController=navController,
             startDestination = Screen.ScrapOutflow.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(
+                top = innerPadding.calculateTopPadding(),
+                start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr)
+                // bottom is NOT applied
+            )
         ){
             composable(Screen.ScrapOutflow.route){
                 ScrapCutPieceOutFlowScreen(navController,onBack = onBackToRoleScreen)

@@ -1,12 +1,15 @@
 package com.factory.myfactory.presentation.screens.navigations
 
 
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -70,7 +73,12 @@ fun AdminNavGraph(
         NavHost(
             navController = navController,
             startDestination = Screen.AdminDashboard.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(
+                top = innerPadding.calculateTopPadding(),
+                start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr)
+                // bottom is NOT applied
+            )
         ) {
             composable(Screen.AdminDashboard.route) {
                 AdminDashboardScreen(navController,onBack = onBackToRoleScreen)
