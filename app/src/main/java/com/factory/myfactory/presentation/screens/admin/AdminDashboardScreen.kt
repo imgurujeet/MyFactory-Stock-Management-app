@@ -370,6 +370,9 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                     )
 
                 }
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
 
 
