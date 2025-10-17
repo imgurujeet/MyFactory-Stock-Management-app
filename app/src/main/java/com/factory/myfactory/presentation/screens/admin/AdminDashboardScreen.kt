@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -24,6 +27,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -75,6 +79,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import com.factory.myfactory.R
 import com.factory.myfactory.data.models.RegisteredUser
 import com.factory.myfactory.presentation.screens.admin.viewmodel.RegisteredUserViewmodel
@@ -136,16 +141,9 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                        // showAddUserDialog = true
 
                     },
-                    Modifier.align(Alignment.CenterEnd).height(40.dp),
+                    Modifier.align(Alignment.CenterEnd).heightIn(min = 45.dp, max = 55.dp), // adjusts height for small/big screens
                     shape = RoundedCornerShape(10.dp),
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = Color.Blue.copy(0.8f)
-//                    ),
-//                    colors = ButtonDefaults.outlinedButtonColors(
-//                        containerColor = Color.G.copy(0.4f)
-//
-//                    ),
-//                    border = BorderStroke(2.dp,Color.Green.copy(0.4f)),
+
 
                     contentPadding = PaddingValues(horizontal = 8.dp)
 
@@ -184,10 +182,6 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                         .weight(1f)
                         .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
                     shape = RoundedCornerShape(10.dp),
-//                    colors = CardDefaults.cardColors(
-//                        containerColor = Color.Green.copy(alpha = 0.1f)
-//                    )
-
                 ){
                     Row(
                         Modifier.fillMaxSize().padding(8.dp),
@@ -198,7 +192,7 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                         Box(
                             modifier = Modifier.background(
                                 Color(0xA868FF6E).copy(alpha = 0.1f) , shape = RoundedCornerShape(10.dp)
-                            ),
+                            ) .size(if (isLandscape) screenWidth * 0.05f else screenHeight * 0.05f),
                             contentAlignment = Alignment.Center,
 
                             ){
@@ -229,11 +223,7 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                             )
                         }
 
-
                     }
-
-
-
 
                 }
                 Card(
@@ -241,10 +231,6 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                         .weight(1f)
                         .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
                     shape = RoundedCornerShape(10.dp),
-//                    colors = CardDefaults.cardColors(
-//                        containerColor = Color.Red.copy(alpha = 0.1f)
-//                    ),
-
 
                     ){ Row(
                     Modifier.fillMaxSize().padding(8.dp),
@@ -255,8 +241,9 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                     Box(
                         modifier = Modifier.background(
                             Color(0xAB00A5FF).copy(alpha = 0.1f) , shape = RoundedCornerShape(10.dp)
-                        ),
+                        ).size(if (isLandscape) screenWidth * 0.05f else screenHeight * 0.05f),
                         contentAlignment = Alignment.Center,
+
 
                         ){
                         Icon(
@@ -264,7 +251,7 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                             contentDescription = "active Icon",
 
                             tint = Color(0xFF00A5FF),
-                            modifier = Modifier.padding(6.dp).size(30.dp)
+                            modifier = Modifier.padding(6.dp).size(30.dp).size(if (isLandscape) screenWidth * 0.03f else screenHeight * 0.03f)
                         )
                     }
                     Column(
@@ -307,27 +294,48 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(if (isLandscape) screenWidth * 0.06f else screenHeight * 0.06f),
                 placeholder = { Text("Search by name or phone") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null,
+                    modifier = Modifier.size(if (isLandscape) 20.dp else 24.dp),
+                    ) },
                 shape = RoundedCornerShape(10.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // Role filter row
-            val allRoles = listOf("All", "Coil", "Admin", "ScrapCutPieceOutFlow", "Pipe","PipeOutflow")
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // --- Role Filter Row (Responsive & Scrollable) ---
+            val allRoles = listOf("All", "Coil", "Admin", "ScrapCutPieceOutFlow", "Pipe", "PipeOutflow")
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()), // make scrollable
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 allRoles.forEach { role ->
                     FilterChip(
                         selected = (selectedRole == role || (role == "All" && selectedRole == null)),
                         onClick = {
                             selectedRole = if (role == "All") null else role
                         },
-                        label = { Text(role) }
+                        label = {
+                            Text(
+                                role,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = if (isLandscape) 12.sp else 14.sp // dynamic font size
+                            )
+                        },
+                        modifier = Modifier.defaultMinSize(
+                            minWidth = 64.dp, // chip min width
+                            minHeight = if (isLandscape) 28.dp else 32.dp
+                        )
                     )
                 }
             }
+
 
             // Apply search + role filter
             val filteredUsers = user.filter { u ->
@@ -442,7 +450,7 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                                 FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     allRoles.filter { it !in roles }.forEach { role ->
                                         AssistChip(
-                                            onClick = { if (role !in roles) roles.add(role) }, // prevent duplicates ✅
+                                            onClick = { if (role !in roles) roles.add(role) }, // prevent duplicates
                                             label = { Text(role) }
                                         )
                                     }

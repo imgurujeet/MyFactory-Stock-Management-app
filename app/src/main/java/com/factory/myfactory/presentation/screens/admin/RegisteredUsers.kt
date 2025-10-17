@@ -3,14 +3,17 @@ package com.factory.myfactory.presentation.screens.admin
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +23,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -53,6 +57,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -173,18 +178,37 @@ fun RegisteredUsersScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Role filter row
-            val allRoles = listOf("All", "Coil", "Admin", "ScrapCutPieceOutFlow", "Pipe","PipeOutflow")
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // --- Role Filter Row (Responsive & Scrollable) ---
+            val allRoles = listOf("All", "Coil", "Admin", "ScrapCutPieceOutFlow", "Pipe", "PipeOutflow")
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()), // make scrollable
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 allRoles.forEach { role ->
                     FilterChip(
                         selected = (selectedRole == role || (role == "All" && selectedRole == null)),
                         onClick = {
                             selectedRole = if (role == "All") null else role
                         },
-                        label = { Text(role) }
+                        label = {
+                            Text(
+                                role,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = if (isLandscape) 12.sp else 14.sp // dynamic font size
+                            )
+                        },
+                        modifier = Modifier.defaultMinSize(
+                            minWidth = 64.dp, // chip min width
+                            minHeight = if (isLandscape) 28.dp else 32.dp
+                        )
                     )
                 }
             }
+
 
             // Apply search + role filter
             val filteredUsers = registeredUser.filter { u ->

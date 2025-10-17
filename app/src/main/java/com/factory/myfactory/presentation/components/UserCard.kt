@@ -36,8 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.factory.myfactory.R
@@ -47,254 +49,254 @@ import com.imgurujeet.stockease.data.models.dummyUsers
 
 @Composable
 fun UserCard(
-    user : User,
+    user: User,
     userRegistered: RegisteredUser?,
-    onEditClick : (User) -> Unit = {},
-    onDeleteClick : (User) -> Unit = {}
+    onEditClick: (User) -> Unit = {},
+    onDeleteClick: (User) -> Unit = {}
+) {
 
-){
 
-    Card (
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+    val isLandscape = screenWidth > screenHeight
+
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-//            .pointerInput(Unit) {
-//                detectTapGestures(
-//                    onLongPress = {
-//                        showDialog = true
-//                    }
-//                )
-//            }
-            .padding( top = 4.dp, bottom = 4.dp),
+            .padding(vertical = if (isLandscape) 2.dp else 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        )
+        ),
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Column (modifier = Modifier.padding(horizontal = 10.dp)){
-            Row (Modifier.fillMaxWidth().padding(top=16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+        Column(modifier = Modifier.padding(horizontal = if (isLandscape) 6.dp else 10.dp, vertical = 8.dp)) {
 
-            ){
+            // User Name & Status
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     text = "${user.name}",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-
+                    fontSize = if (isLandscape) 14.sp else 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = if(userRegistered?.active.toString() == "true") "Active" else " Inactive",
-
+                    text = if (userRegistered?.active.toString() == "true") "Active" else "Inactive",
+                    fontSize = if (isLandscape) 12.sp else 14.sp,
+                    color = if (userRegistered?.active.toString() == "true") Color(0xFF00A5FF) else Color.Gray
                 )
-
-
             }
+
+            // Phone
             Text(
-                text = "${user.phone}",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = "Active Roles: ${user.roles}"
+                text = user.phone,
+                fontSize = if (isLandscape) 12.sp else 15.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
+            // Roles
+            Text(
+                text = "Active Roles: ${user.roles}",
+                fontSize = if (isLandscape) 12.sp else 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            // Last Login & Action Buttons
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp,),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = if (isLandscape) 4.dp else 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-
-
-            ){
+            ) {
                 Text(
-                    text = "Last Login: ${user.lastLogin.toDateString()}"
+                    text = "Last Login: ${user.lastLogin.toDateString()}",
+                    fontSize = if (isLandscape) 10.sp else 12.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Row(
-                    modifier = Modifier,
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ){
-
+                    horizontalArrangement = Arrangement.spacedBy(if (isLandscape) 8.dp else 12.dp)
+                ) {
+                    // Edit Button
                     Box(
-                        modifier = Modifier.background(
-                            Color(0xAB00A5FF).copy(alpha = 0.1f) , shape = RoundedCornerShape(10.dp)
-                        ).clickable(
-                            onClick = {
-                                onEditClick(user)
-                            }
-                        )
-                        ,
-                        contentAlignment = Alignment.Center,
-
-                        ){
+                        modifier = Modifier
+                            .background(
+                                Color(0xAB00A5FF).copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable { onEditClick(user) }
+                            .padding(if (isLandscape) 4.dp else 6.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_edit),
                             contentDescription = "Edit Icon",
-
                             tint = Color(0xFF00A5FF),
-                            modifier = Modifier.padding(6.dp).size(24.dp)
+                            modifier = Modifier.size(if (isLandscape) 18.dp else 24.dp)
                         )
                     }
-                    //Spacer(modifier = Modifier.padding(10.dp))
+
+                    // Delete Button
                     Box(
-                        modifier = Modifier.background(
-                            Color.Red.copy(alpha = 0.1f) , shape = RoundedCornerShape(10.dp)
-                        ).clickable(
-                            onClick = {
-                                onDeleteClick(user)
-                            }
-                        )
-
-                        ,
-                        contentAlignment = Alignment.Center,
-
-                        ){
+                        modifier = Modifier
+                            .background(
+                                Color.Red.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable { onDeleteClick(user) }
+                            .padding(if (isLandscape) 4.dp else 6.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_delete),
-                            contentDescription = "Edit Icon",
+                            contentDescription = "Delete Icon",
                             tint = Color.Red.copy(alpha = 0.4f),
-                            modifier = Modifier.padding(6.dp)
+                            modifier = Modifier.size(if (isLandscape) 18.dp else 22.dp)
                         )
                     }
-
                 }
-
             }
-
-
-
         }
-
     }
-
 }
+
 
 
 
 @Composable
 fun RegisterUserCard(
-    user : RegisteredUser,
-    onEditClick : (RegisteredUser) -> Unit = {},
-    onUpdateClick : (RegisteredUser) -> Unit = {}
+    user: RegisteredUser,
+    onEditClick: (RegisteredUser) -> Unit = {},
+    onUpdateClick: (RegisteredUser) -> Unit = {}
+) {
 
-){
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+    val isLandscape = screenWidth > screenHeight
 
-    Card (
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-//            .pointerInput(Unit) {
-//                detectTapGestures(
-//                    onLongPress = {
-//                        showDialog = true
-//                    }
-//                )
-//            }
-            .padding( top = 4.dp, bottom = 4.dp),
+            .padding(vertical = if (isLandscape) 2.dp else 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        )
+        ),
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Column (modifier = Modifier.padding(horizontal = 10.dp)){
-            Row (Modifier.fillMaxWidth().padding(top=16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+        Column(modifier = Modifier.padding(horizontal = if (isLandscape) 6.dp else 10.dp, vertical = 8.dp)) {
 
-            ){
+            // Name & Status
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     text = "${user.name}",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-
+                    fontSize = if (isLandscape) 14.sp else 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = if(user.active == true) "Active" else " Inactive",
-
-                    )
-
-
+                    text = if (user.active == true) "Active" else "Inactive",
+                    fontSize = if (isLandscape) 12.sp else 14.sp,
+                    color = if (user.active == true) Color(0xFF00A5FF) else Color.Gray
+                )
             }
+
+            // Phone
             Text(
-                text = "${user.phone}",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = "Initial Roles: ${user.roles}"
+                text = user.phone,
+                fontSize = if (isLandscape) 12.sp else 15.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
+            // Roles
+            Text(
+                text = "Initial Roles: ${user.roles}",
+                fontSize = if (isLandscape) 12.sp else 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            // Action Buttons
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp,),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = if (isLandscape) 4.dp else 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-
-
-            ){
-
-
-                Row(
-                    modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ){
-
-                    Box(
-                        modifier = Modifier.background(
-                            Color(0xAB00A5FF).copy(alpha = 0.1f) , shape = RoundedCornerShape(10.dp)
-                        ).clickable(
-                            onClick = {
-                                onEditClick(user)
-                            }
+                horizontalArrangement = Arrangement.spacedBy(if (isLandscape) 8.dp else 12.dp)
+            ) {
+                // Edit Button
+                Box(
+                    modifier = Modifier
+                        .background(
+                            Color(0xAB00A5FF).copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(8.dp)
                         )
-                        ,
-                        contentAlignment = Alignment.Center,
-
-                        ){
-                        Icon(
-                            painter = painterResource(R.drawable.ic_edit),
-                            contentDescription = "Edit Icon",
-
-                            tint = Color(0xFF00A5FF),
-                            modifier = Modifier.padding(6.dp).size(24.dp)
-                        )
-                    }
-                    //Spacer(modifier = Modifier.padding(10.dp))
-                    Box(
-                        modifier = Modifier.background(
-                            if (user.active== true) Color.Red.copy(alpha = 0.1f) else Color.Green.copy(alpha = 0.1f) , shape = RoundedCornerShape(10.dp)
-                        ).clickable(
-                            onClick = {
-                                onUpdateClick(user)
-                            }
-                        )
-
-                        ,
-                        contentAlignment = Alignment.Center,
-
-                        ){
-                        Row( modifier = Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                            ){
-                            Text(
-                                text = if (user.active== true) "Deactivate" else "Activate"
-                            )
-
-                            Icon(
-                                painter = painterResource(R.drawable.ic_logout),
-                                contentDescription = "Edit Icon",
-                                tint = if (user.active== true) Color.Red.copy(alpha = 0.4f) else Color.Green.copy(alpha = 0.4f),
-                                modifier = Modifier.padding(6.dp)
-                            )
-                        }
-                    }
-
+                        .clickable { onEditClick(user) }
+                        .padding(if (isLandscape) 4.dp else 6.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_edit),
+                        contentDescription = "Edit Icon",
+                        tint = Color(0xFF00A5FF),
+                        modifier = Modifier.size(if (isLandscape) 18.dp else 24.dp)
+                    )
                 }
 
+                // Activate / Deactivate Button
+                Box(
+                    modifier = Modifier
+                        .background(
+                            if (user.active == true) Color.Red.copy(alpha = 0.1f) else Color.Green.copy(
+                                alpha = 0.1f
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .clickable { onUpdateClick(user) }
+                        .padding(if (isLandscape) 4.dp else 6.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (user.active == true) "Deactivate" else "Activate",
+                            fontSize = if (isLandscape) 10.sp else 12.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.ic_logout),
+                            contentDescription = "Status Icon",
+                            tint = if (user.active == true) Color.Red.copy(alpha = 0.4f) else Color.Green.copy(alpha = 0.4f),
+                            modifier = Modifier
+                                .padding(start = if (isLandscape) 2.dp else 6.dp)
+                                .size(if (isLandscape) 16.dp else 20.dp)
+                        )
+                    }
+                }
             }
-
-
-
         }
-
     }
-
 }
 
 
