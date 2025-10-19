@@ -31,6 +31,7 @@ import java.util.Date
 import java.util.Locale
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -135,17 +136,37 @@ fun ListViewCard(
                         )
 
                     }
+
+                        Box(
+                            modifier = Modifier.weight(0.5f).background(Color.Transparent,shape = RoundedCornerShape(10.dp)).padding(8.dp),
+                            contentAlignment = Alignment.CenterEnd
+
+                        ){
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ){
+                                Text(
+                                    text = stockItem.weight.toBigDecimal().toPlainString(),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = " Kgs",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+
+                        }
                     }
 
                     Column(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-//                        Text(
-//                            text = "Entry by: ${stockItem.entryUserName}",
-//                            style = MaterialTheme.typography.bodySmall,
-//                            color = MaterialTheme.colorScheme.onSurfaceVariant
-//                        )
 
                         Text(
                             text = "Added: ${stockItem.timestamp.toDateString()} " + "(${stockItem.timestamp.toTimeAgoString()})",
@@ -155,37 +176,7 @@ fun ListViewCard(
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                Box(
-                    modifier = Modifier.background(Color.Transparent,shape = RoundedCornerShape(10.dp)).padding(8.dp),
-                    contentAlignment = Alignment.Center
 
-                ){
-                    Column{
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ){
-                            Text(
-                                text = "${stockItem.weight}",
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "Kgs",
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-
-
-//                        Text(
-//                            text = if(stockItem.weight >= 1000)  "High Stock" else if (stockItem.weight >= 500) "Medium Stock" else "Low Stock",
-//                            color = if(stockItem.weight >= 1000)  Color.Green.copy(alpha = 0.5f) else if (stockItem.weight >= 500) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else  Color.Red.copy(alpha = 0.5f)
-//                        )
-                    }
-
-
-                }
 
             }
 

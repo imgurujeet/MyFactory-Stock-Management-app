@@ -133,7 +133,7 @@ fun TableViewCard(
             ){
                 Column {
                     Text(
-                        text = "${stockItem.weight}",
+                        text = stockItem.weight.toBigDecimal().toPlainString(),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,

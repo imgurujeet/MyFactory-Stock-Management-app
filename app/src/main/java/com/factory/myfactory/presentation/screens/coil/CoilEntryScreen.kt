@@ -184,7 +184,7 @@ fun CoilEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: Co
                     onClick = {
                         val currentUser = FirebaseAuth.getInstance().currentUser
                         val uid = currentUser?.uid
-                        if (!uid.isNullOrEmpty()) {  // ✅ check non-empty
+                        if (!uid.isNullOrEmpty()) {  //  check non-empty
                             val db = FirebaseFirestore.getInstance()
                             db.collection("users").document(uid)
                                 .get()

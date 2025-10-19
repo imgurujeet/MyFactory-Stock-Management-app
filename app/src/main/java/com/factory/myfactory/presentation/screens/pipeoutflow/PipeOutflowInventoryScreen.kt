@@ -3,10 +3,12 @@ package com.factory.myfactory.presentation.screens.pipeoutflow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,7 +58,7 @@ fun PipeOutflowInventoryScreen(navHost: NavHostController,onBack: () -> Unit,vie
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .windowInsetsPadding(WindowInsets.statusBars).padding(horizontal = 16.dp,vertical = 8.dp)
+                    .windowInsetsPadding(WindowInsets.statusBars).padding(horizontal = 16.dp)
                     .padding(bottom = 8.dp)
             ) {
                 Text(
@@ -92,6 +94,9 @@ fun PipeOutflowInventoryScreen(navHost: NavHostController,onBack: () -> Unit,vie
                         navHost,
                         pipeStock = pipeItem.pipeStock
                     )
+                }
+                item {
+                    Spacer(modifier = Modifier.size(80.dp))
                 }
 
             }

@@ -11,6 +11,16 @@ android {
     namespace = "com.factory.myfactory"
     compileSdk = 36
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "key0"
+            keyPassword = "000000"
+            storeFile = file("C:/Users/opule/AndroidStudioProjects/MyFactory/release-key.jks")
+            storePassword = "000000"
+        }
+    }
+
+
     defaultConfig {
         applicationId = "com.factory.myfactory"
         minSdk = 24
@@ -28,8 +38,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release") // MUST use '='
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

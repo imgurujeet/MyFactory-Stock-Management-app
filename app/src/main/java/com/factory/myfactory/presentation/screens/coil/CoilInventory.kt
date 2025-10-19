@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,6 +48,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -101,7 +105,7 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.statusBars)
                     .padding(horizontal = 16.dp)
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             ){
                 Text(
                     text = "Coil Entry",
@@ -136,17 +140,33 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                     .padding(horizontal = 16.dp)
                     //.verticalScroll(rememberScrollState())
             ){
-                Text(
-                    "filter:" ,
-                )
+                val fontSize = when {
+                    screenWidth < 360.dp -> 12.sp
+                    screenWidth < 600.dp -> 14.sp
+                    else -> 16.sp
+                }
+
+                val iconSize = when {
+                    screenWidth < 360.dp -> 16.dp
+                    screenWidth < 600.dp -> 20.dp
+                    else -> 24.dp
+                }
+
+                val paddingSize = when {
+                    screenWidth < 360.dp -> 4.dp
+                    screenWidth < 600.dp -> 6.dp
+                    else -> 8.dp
+                }
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = paddingSize),
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                ){
+                ) {
 
-                    // Example: size filter
+
+
+                    // Size filter
                     ExposedDropdownMenuBox(
                         expanded = expandedSize,
                         onExpandedChange = { expandedSize = !expandedSize },
@@ -156,22 +176,24 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                             value = selectedSize,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Size") },
-                            trailingIcon = { if (selectedSize.isNotEmpty()) {
-                                // Show clear icon if something is selected
-                                IconButton(onClick = { selectedSize = "" }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Clear,
-                                        contentDescription = "Clear selection"
-                                    )
+                            textStyle = LocalTextStyle.current.copy(fontSize = fontSize),
+                            label = { Text("Size", fontSize = fontSize) },
+                            trailingIcon = {
+                                if (selectedSize.isNotEmpty()) {
+                                    IconButton(onClick = { selectedSize = "" }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear selection",
+                                            modifier = Modifier.size(iconSize)
+                                        )
+                                    }
+                                } else {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedSize)
                                 }
-                            } else {
-                                // Normal dropdown arrow
-                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedSize)
-                            }
-                             },
+                            },
                             modifier = Modifier.menuAnchor(),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(10.dp),
+                            singleLine = true
                         )
                         ExposedDropdownMenu(
                             expanded = expandedSize,
@@ -179,7 +201,7 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                         ) {
                             sizeOptions.forEach { size ->
                                 DropdownMenuItem(
-                                    text = { Text(size) },
+                                    text = { Text(size, fontSize = fontSize) },
                                     onClick = {
                                         selectedSize = size
                                         expandedSize = false
@@ -188,9 +210,10 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                             }
                         }
                     }
-                    Spacer(Modifier.padding(8.dp))
 
-                    // Example: gauge filter
+                    Spacer(Modifier.width(paddingSize))
+
+                    // Gauge filter
                     ExposedDropdownMenuBox(
                         expanded = expandedGauge,
                         onExpandedChange = { expandedGauge = !expandedGauge },
@@ -200,22 +223,24 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                             value = selectedGauge,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("gauge") },
-                            trailingIcon = { if (selectedGauge.isNotEmpty()) {
-                                // Show clear icon if something is selected
-                                IconButton(onClick = { selectedGauge = "" }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Clear,
-                                        contentDescription = "Clear selection"
-                                    )
+                            textStyle = LocalTextStyle.current.copy(fontSize = fontSize),
+                            label = { Text("Gauge", fontSize = fontSize) },
+                            trailingIcon = {
+                                if (selectedGauge.isNotEmpty()) {
+                                    IconButton(onClick = { selectedGauge = "" }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear selection",
+                                            modifier = Modifier.size(iconSize)
+                                        )
+                                    }
+                                } else {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGauge)
                                 }
-                            } else {
-                                // Normal dropdown arrow
-                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGauge)
-                            }
                             },
-                            modifier = Modifier.menuAnchor() ,// anchors dropdown to text field
-                            shape = RoundedCornerShape(10.dp)
+                            modifier = Modifier.menuAnchor(),
+                            shape = RoundedCornerShape(10.dp),
+                            singleLine = true
                         )
                         ExposedDropdownMenu(
                             expanded = expandedGauge,
@@ -223,7 +248,7 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                         ) {
                             gaugeOptions.forEach { gauge ->
                                 DropdownMenuItem(
-                                    text = { Text(gauge) },
+                                    text = { Text(gauge, fontSize = fontSize) },
                                     onClick = {
                                         selectedGauge = gauge
                                         expandedGauge = false
@@ -232,8 +257,6 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                             }
                         }
                     }
-
-
                 }
 
 
@@ -282,6 +305,9 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                             viewModel = viewModel ,// pass full object (for id on delete)
                             navHost = navHost
                         )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
 
                 }
@@ -347,6 +373,9 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                                 navHost = navHost
                             )
                         }
+                        item {
+                            Spacer(modifier = Modifier.height(80.dp))
+                        }
                     }
 
 
@@ -362,97 +391,3 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
 
 }
 
-
-
-
-
-//Card(
-//modifier = Modifier
-//.weight(1f)
-//.height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
-//shape = RoundedCornerShape(10.dp),
-//colors = CardDefaults.cardColors(
-//containerColor = Color.Green.copy(alpha = 0.1f)
-//)
-//
-//){
-//    Row(
-//        Modifier.fillMaxSize().padding(8.dp),
-//        horizontalArrangement = Arrangement.Center,
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Column(
-//            modifier = Modifier
-//                .weight(1f),
-//            verticalArrangement = Arrangement.Center, // center vertically
-//        ) {
-//            Text(
-//                text = "${stockList.size}",
-//                style = MaterialTheme.typography.headlineLarge,
-//                color = MaterialTheme.colorScheme.onSurface,
-//                fontWeight = FontWeight.SemiBold
-//            )
-//            Text(
-//                text = "Total Coil",
-//                style = MaterialTheme.typography.titleSmall,
-//                color = MaterialTheme.colorScheme.onSurface,
-//                fontWeight = FontWeight.Thin
-//            )
-//        }
-//
-//        Icon(
-//            painter = painterResource(R.drawable.ic_coil),
-//            contentDescription = "Coil Image",
-//            tint = Color.Green.copy(alpha = 0.4f),
-//        )
-//    }
-//
-//
-//
-//
-//}
-//Card(
-//modifier = Modifier
-//.weight(1f)
-//.height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
-//shape = RoundedCornerShape(10.dp),
-//colors = CardDefaults.cardColors(
-//containerColor = Color.Red.copy(alpha = 0.1f)
-//),
-//
-//
-//){ Row(
-//    Modifier.fillMaxSize().padding(8.dp),
-//    horizontalArrangement = Arrangement.Center,
-//    verticalAlignment = Alignment.CenterVertically
-//){
-//    Column(
-//        modifier = Modifier
-//            .weight(1f),
-//        verticalArrangement = Arrangement.Center, // center vertically
-//        //horizontalAlignment = Alignment.CenterHorizontally // center horizontally
-//    ){
-//        Text(
-//            text = "$totalWeight",
-//            style = MaterialTheme.typography.headlineLarge,
-//            color = MaterialTheme.colorScheme.onSurface,
-//            fontWeight = FontWeight.SemiBold
-//        )
-//        Text(
-//            text = "Total Weight" ,
-//            style = MaterialTheme.typography.titleSmall,
-//            color = MaterialTheme.colorScheme.onSurface,
-//            fontWeight = FontWeight.Thin
-//        )
-//    }
-//
-//    Icon(
-//        painter = painterResource(R.drawable.ic_weight),
-//        contentDescription = "Coil Image",
-//        tint = Color.Red.copy(alpha = 0.4f),
-//    )
-//
-//}
-//
-//
-//}

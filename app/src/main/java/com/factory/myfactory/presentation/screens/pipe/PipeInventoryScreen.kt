@@ -1,10 +1,14 @@
 package com.factory.myfactory.presentation.screens.pipe
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +20,16 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,6 +64,7 @@ import com.factory.myfactory.presentation.components.SlidingSwitch
 import com.factory.myfactory.presentation.screens.pipe.viemodel.PipeViewModel
 import kotlin.text.compareTo
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hiltViewModel()){
     val context = LocalContext.current
@@ -92,6 +105,47 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
     val successMessage by viewModel.successMessage.collectAsState()
+
+    // --- Filter states ---
+    var selectedGauge by rememberSaveable { mutableStateOf("") }
+    var selectedGrade by rememberSaveable { mutableStateOf("") }
+    var expandedGauge by remember { mutableStateOf(false) }
+
+    val gaugeOptions = listOf("16g", "18g", "20g", "22g", "24g", "26g", "28g")
+    val gradeOptions = listOf("202", "304")
+
+    // --- Apply filter dynamically for current section ---
+    val filteredPipeList = pipeEntries.filter {
+        (selectedGauge.isEmpty() || it.pipeStock.gauge == selectedGauge) &&
+                (selectedGrade.isEmpty() || it.pipeStock.grade == selectedGrade)
+    }
+    val filteredScrapList = scrapEntries.filter {
+        (selectedGauge.isEmpty() || it.scrapStock.gauge == selectedGauge) &&
+                (selectedGrade.isEmpty() || it.scrapStock.grade == selectedGrade)
+    }
+    val filteredCutPieceList = cutPieceEntries.filter {
+        (selectedGauge.isEmpty() || it.cutPieceStock.gauge == selectedGauge) &&
+                (selectedGrade.isEmpty() || it.cutPieceStock.grade == selectedGrade)
+    }
+
+    // --- LIST / TABLE View based on section ---
+    val filteredPipeInventory = pipeInventory
+        ?.map { it.pipeStock }
+        ?.filter { (selectedGauge.isEmpty() || it.gauge == selectedGauge) &&
+                (selectedGrade.isEmpty() || it.grade == selectedGrade) } ?: emptyList()
+
+    val filteredScrapInventory = scrapInventory
+        ?.map { it.scrapStock }
+        ?.filter { (selectedGauge.isEmpty() || it.gauge == selectedGauge) &&
+                (selectedGrade.isEmpty() || it.grade == selectedGrade) } ?: emptyList()
+
+    val filteredCutPieceInventory = cutPieceInventory
+        ?.map { it.cutPieceStock }
+        ?.filter { (selectedGauge.isEmpty() || it.gauge == selectedGauge) &&
+                (selectedGrade.isEmpty() || it.grade == selectedGrade) } ?: emptyList()
+
+
+
 
 
     Scaffold (
@@ -139,6 +193,88 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
                 //.verticalScroll(rememberScrollState())
             ){
 
+                // --- FILTERS (common for all sections) ---
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Gauge Filter
+                    ExposedDropdownMenuBox(
+                        expanded = expandedGauge,
+                        onExpandedChange = { expandedGauge = !expandedGauge },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        OutlinedTextField(
+                            value = selectedGauge,
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Gauge") },
+                            trailingIcon = {
+                                if (selectedGauge.isNotEmpty()) {
+                                    Icon(
+                                        imageVector = androidx.compose.material.icons.Icons.Default.Clear,
+                                        contentDescription = "Clear",
+                                        modifier = Modifier.clickable { selectedGauge = "" }
+                                    )
+                                } else {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGauge)
+                                }
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .height(screenHeight * 0.06f), // Responsive thin height
+                            shape = RoundedCornerShape(8.dp)
+                        )
+
+
+                        ExposedDropdownMenu(
+                            expanded = expandedGauge,
+                            onDismissRequest = { expandedGauge = false },
+                        ) {
+                            gaugeOptions.forEach { gauge ->
+                                DropdownMenuItem(
+                                    text = { Text(gauge) },
+                                    onClick = {
+                                        selectedGauge = gauge
+                                        expandedGauge = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.padding(6.dp))
+
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ){
+                        // Grade Filter (Compact Chips)
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                           // modifier = Modifier.weight(1f)
+                        ) {
+                            gradeOptions.forEach { grade ->
+                                androidx.compose.material3.FilterChip(
+                                    selected = selectedGrade == grade,
+                                    onClick = {
+                                        selectedGrade = if (selectedGrade == grade) "" else grade
+                                    },
+                                    label = { Text(grade, fontSize = 12.sp) }
+                                )
+                            }
+                        }
+
+                    }
+
+
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
                 SlidingSwitch(
                     viewList,
                     selectedIndex = viewOptionSelected,
@@ -168,27 +304,37 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
 
                     when (viewOptionSelected) {
                         0 -> { // Pipe
-                            items(pipeEntries) { pipeItem ->
+                            items(filteredPipeList) { pipeItem ->
                                 PipeDetailCard(
                                     navHost,
                                     pipeStock = pipeItem.pipeStock
                                 )
                             }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
+                            }
                         }
                         1-> {
-                            items(scrapEntries) { scrapItem ->
+                            items(filteredScrapList) { scrapItem ->
                                 ScrapDetailCard(
                                     navHost,
                                     scrapStock = scrapItem.scrapStock
                                 )
                             }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
+                            }
+
                         }
                         2-> {
-                            items(cutPieceEntries) { cutPieceEntry ->
+                            items(filteredCutPieceList) { cutPieceEntry ->
                                 CutPieceDetailCard(
                                     navHost,
                                     cutPieceStock = cutPieceEntry.cutPieceStock
                                 )
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
                             }
                         }
                     }
@@ -199,22 +345,9 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
 
                     // Table view
                     when (viewOptionSelected) {
-                        0 -> PipeDetailTableView(
-                            navHost = navHost,
-                            pipeStockList = pipeInventory?.map { it.pipeStock } ?: emptyList()
-                        )
-
-                        1 -> ScrapDetailTableView(
-                            navHost,
-                            scrapStockList = scrapInventory?.map { it.scrapStock}  ?: emptyList()
-
-                        )
-
-                        2 -> CutPieceDetailTableView(
-                            navHost,
-                            cutPieceStock = cutPieceInventory?.map { it.cutPieceStock}  ?: emptyList()
-
-                        )
+                        0 -> PipeDetailTableView(navHost, pipeStockList = filteredPipeInventory)
+                        1 -> ScrapDetailTableView(navHost, scrapStockList = filteredScrapInventory)
+                        2 -> CutPieceDetailTableView(navHost, cutPieceStock = filteredCutPieceInventory)
 
                     }
 
