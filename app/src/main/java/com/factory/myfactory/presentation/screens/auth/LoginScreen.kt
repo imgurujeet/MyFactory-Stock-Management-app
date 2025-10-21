@@ -60,6 +60,7 @@ import com.factory.myfactory.presentation.screens.auth.viewmodel.AuthState
 import com.factory.myfactory.presentation.screens.auth.viewmodel.AuthViewModel
 import com.factory.myfactory.presentation.screens.navigations.Screen
 import com.google.firebase.auth.FirebaseAuth
+import com.imgurujeet.stockease.data.models.Role
 import kotlinx.coroutines.launch
 
 @Composable
@@ -140,7 +141,8 @@ fun LoginScreen(
 
             roles.forEach { role ->
                 RoleCard(
-                    role = role,
+                    role = if(role == "PipeOutflow") "Pipe Outflow"
+                    else if (role == "ScrapCutPieceOutFlow") "Scrap-CutPiece Outflow" else role,
                     icon = {
                         Icon(
                             painter = painterResource(id = getRoleIcon(role)),

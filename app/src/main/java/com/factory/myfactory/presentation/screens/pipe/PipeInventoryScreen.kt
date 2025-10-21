@@ -193,88 +193,6 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
                 //.verticalScroll(rememberScrollState())
             ){
 
-                // --- FILTERS (common for all sections) ---
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Gauge Filter
-                    ExposedDropdownMenuBox(
-                        expanded = expandedGauge,
-                        onExpandedChange = { expandedGauge = !expandedGauge },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        OutlinedTextField(
-                            value = selectedGauge,
-                            onValueChange = {},
-                            readOnly = true,
-                            label = { Text("Gauge") },
-                            trailingIcon = {
-                                if (selectedGauge.isNotEmpty()) {
-                                    Icon(
-                                        imageVector = androidx.compose.material.icons.Icons.Default.Clear,
-                                        contentDescription = "Clear",
-                                        modifier = Modifier.clickable { selectedGauge = "" }
-                                    )
-                                } else {
-                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGauge)
-                                }
-                            },
-                            modifier = Modifier
-                                .menuAnchor()
-                                .height(screenHeight * 0.06f), // Responsive thin height
-                            shape = RoundedCornerShape(8.dp)
-                        )
-
-
-                        ExposedDropdownMenu(
-                            expanded = expandedGauge,
-                            onDismissRequest = { expandedGauge = false },
-                        ) {
-                            gaugeOptions.forEach { gauge ->
-                                DropdownMenuItem(
-                                    text = { Text(gauge) },
-                                    onClick = {
-                                        selectedGauge = gauge
-                                        expandedGauge = false
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.padding(6.dp))
-
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.Center
-                    ){
-                        // Grade Filter (Compact Chips)
-                        FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                           // modifier = Modifier.weight(1f)
-                        ) {
-                            gradeOptions.forEach { grade ->
-                                androidx.compose.material3.FilterChip(
-                                    selected = selectedGrade == grade,
-                                    onClick = {
-                                        selectedGrade = if (selectedGrade == grade) "" else grade
-                                    },
-                                    label = { Text(grade, fontSize = 12.sp) }
-                                )
-                            }
-                        }
-
-                    }
-
-
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
                 SlidingSwitch(
                     viewList,
                     selectedIndex = viewOptionSelected,
@@ -282,6 +200,97 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
                         viewOptionSelected = index
                     }
                 )
+
+                Spacer(modifier = Modifier.height(12.dp)) 
+
+
+                // --- FILTERS (common for all sections) ---
+
+                when(viewOptionSelected) {
+                    0->{
+
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Gauge Filter
+                            ExposedDropdownMenuBox(
+                                expanded = expandedGauge,
+                                onExpandedChange = { expandedGauge = !expandedGauge },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                OutlinedTextField(
+                                    value = selectedGauge,
+                                    onValueChange = {},
+                                    readOnly = true,
+                                    label = { Text("Gauge") },
+                                    trailingIcon = {
+                                        if (selectedGauge.isNotEmpty()) {
+                                            Icon(
+                                                imageVector = androidx.compose.material.icons.Icons.Default.Clear,
+                                                contentDescription = "Clear",
+                                                modifier = Modifier.clickable { selectedGauge = "" }
+                                            )
+                                        } else {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGauge)
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .menuAnchor()
+                                        .height(screenHeight * 0.06f), // Responsive thin height
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+
+
+                                ExposedDropdownMenu(
+                                    expanded = expandedGauge,
+                                    onDismissRequest = { expandedGauge = false },
+                                ) {
+                                    gaugeOptions.forEach { gauge ->
+                                        DropdownMenuItem(
+                                            text = { Text(gauge) },
+                                            onClick = {
+                                                selectedGauge = gauge
+                                                expandedGauge = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.padding(6.dp))
+
+                            Box(
+                                modifier = Modifier.weight(1f),
+                                contentAlignment = Alignment.Center
+                            ){
+                                // Grade Filter (Compact Chips)
+                                FlowRow(
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                    // modifier = Modifier.weight(1f)
+                                ) {
+                                    gradeOptions.forEach { grade ->
+                                        androidx.compose.material3.FilterChip(
+                                            selected = selectedGrade == grade,
+                                            onClick = {
+                                                selectedGrade = if (selectedGrade == grade) "" else grade
+                                            },
+                                            label = { Text(grade, fontSize = 12.sp) }
+                                        )
+                                    }
+                                }
+
+                            }
+
+
+                        }
+
+                    }
+                }
+
                 // Show loading indicator
                 if (loading) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -315,7 +324,7 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
                             }
                         }
                         1-> {
-                            items(filteredScrapList) { scrapItem ->
+                            items(scrapEntries) { scrapItem ->
                                 ScrapDetailCard(
                                     navHost,
                                     scrapStock = scrapItem.scrapStock
@@ -327,7 +336,7 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
 
                         }
                         2-> {
-                            items(filteredCutPieceList) { cutPieceEntry ->
+                            items(cutPieceEntries) { cutPieceEntry ->
                                 CutPieceDetailCard(
                                     navHost,
                                     cutPieceStock = cutPieceEntry.cutPieceStock
@@ -346,8 +355,8 @@ fun PipeInventoryScreen(navHost: NavHostController,viewModel: PipeViewModel =hil
                     // Table view
                     when (viewOptionSelected) {
                         0 -> PipeDetailTableView(navHost, pipeStockList = filteredPipeInventory)
-                        1 -> ScrapDetailTableView(navHost, scrapStockList = filteredScrapInventory)
-                        2 -> CutPieceDetailTableView(navHost, cutPieceStock = filteredCutPieceInventory)
+                        1 -> ScrapDetailTableView(navHost, scrapStockList = scrapInventory ?.map { it.scrapStock }?:emptyList())
+                        2 -> CutPieceDetailTableView(navHost, cutPieceStock = cutPieceInventory ?.map {it.cutPieceStock}?:emptyList())
 
                     }
 

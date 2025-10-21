@@ -1,10 +1,12 @@
 package com.factory.myfactory.data.repositories
 
+import androidx.compose.ui.graphics.Path
 import com.factory.myfactory.data.models.PipeStock
 import com.factory.myfactory.data.models.ScrapStock
 import com.factory.myfactory.data.models.CutPieceStock
 import com.factory.myfactory.data.models.CoilStockItem
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -494,7 +496,7 @@ class PipeRepository @Inject constructor(
     // ---------- LIVE FLOW FOR PIPE ENTRY ----------
     fun getPipeEntriesFlow(): Flow<List<PipeStockWithId>> = callbackFlow {
         val listener = db.collection(PIPE_ENTRY_DB)
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) { close(e); return@addSnapshotListener }
                 val items = snapshot?.documents?.map { doc ->
@@ -521,7 +523,7 @@ class PipeRepository @Inject constructor(
     // ---------- LIVE FLOW FOR SCRAP ENTRY ----------
     fun getScrapEntriesFlow(): Flow<List<ScrapStockWithId>> = callbackFlow {
         val listener = db.collection(SCRAP_DB)
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) { close(e); return@addSnapshotListener }
                 val items = snapshot?.documents?.map { doc ->
@@ -548,7 +550,7 @@ class PipeRepository @Inject constructor(
     // ---------- LIVE FLOW FOR CUT PIECE ENTRY ----------
     fun getCutPieceEntriesFlow(): Flow<List<CutPieceStockWithId>> = callbackFlow {
         val listener = db.collection(CUT_PIECE_DB)
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) { close(e); return@addSnapshotListener }
                 val items = snapshot?.documents?.map { doc ->
@@ -563,7 +565,7 @@ class PipeRepository @Inject constructor(
      //-----------------LIVE FLOW FOR PIPE OUTFLOW INVENTORY ----------
      fun getPipeOutflowEntriesFlow(): Flow<List<PipeStockWithId>> = callbackFlow {
          val listener = db.collection(PIPE_OUTFLOW_DB)
-             .orderBy("timestamp")
+             .orderBy("timestamp", Query.Direction.DESCENDING)
              .addSnapshotListener { snapshot, e ->
                  if (e != null) { close(e); return@addSnapshotListener }
                  val items = snapshot?.documents?.map { doc ->
@@ -578,7 +580,7 @@ class PipeRepository @Inject constructor(
 
     fun getScrapOutflowEntriesFlow(): Flow<List<ScrapStockWithId>> = callbackFlow {
         val listener = db.collection(SCRAP_OUTFLOW_DB)
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) { close(e); return@addSnapshotListener }
                 val items = snapshot?.documents?.map { doc ->
@@ -591,7 +593,7 @@ class PipeRepository @Inject constructor(
 
     fun getCutPieceOutflowEntriesFlow(): Flow<List<CutPieceStockWithId>> = callbackFlow {
         val listener = db.collection(CUT_PIECE_OUTFLOW_INVENTORY_DB)
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e->
                 if (e != null) { close(e); return@addSnapshotListener}
                 val items = snapshot?.documents?.map { doc ->

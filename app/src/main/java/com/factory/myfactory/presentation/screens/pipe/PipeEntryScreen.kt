@@ -375,8 +375,6 @@ fun PipeEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: Pi
                                    gauge = gauges,
                                    grade = grades,
                                    quantity = numPipes,
-//                                   scrapWeight = scrap.round(2),
-//                                   cutPieceWeight = cutPiece.round(2),
                                    approxWeight = approx.round(2),
                                    entryUserId = uid,
                                    entryUserName = name

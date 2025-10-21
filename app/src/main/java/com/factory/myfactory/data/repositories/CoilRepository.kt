@@ -2,6 +2,7 @@ package com.factory.myfactory.data.repositories
 
 import com.factory.myfactory.data.models.CoilStockItem
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -75,7 +76,7 @@ class CoilRepository @Inject constructor(
 
     fun getAllEntriesFlow(): Flow<List<CoilStockItemWithId>> = callbackFlow {
         val listener = db.collection(COIL_ENTRY_DB)
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     close(e)
