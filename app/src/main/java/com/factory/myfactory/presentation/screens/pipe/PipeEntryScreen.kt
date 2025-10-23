@@ -231,7 +231,7 @@ fun PipeEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: Pi
                     options = pipeOptions,
                     selectedOption = pipeSize,
                     onOptionSelected = {pipeSize=it},
-                    modifier = Modifier.weight(1.5f).padding(bottom = 10.dp, end = 10.dp)
+                    modifier = Modifier.weight(1f).padding(bottom = 10.dp, end = 10.dp)
 
                 )
                 val coilOptions = getCoilSizeOptions(pipeType,pipeSize)
@@ -303,7 +303,7 @@ fun PipeEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: Pi
                             scrapWeight = input
                         }
                     },
-                    label = { Text("Scrap(in Kgs)") },
+                    label = { Text("Scrap(Kgs)") },
                     modifier = Modifier.fillMaxWidth().weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Phone
@@ -321,7 +321,7 @@ fun PipeEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: Pi
                             cutPieceWeight = input
                         }
                     },
-                    label = { Text("CutPiece(in Kgs)") },
+                    label = { Text("CutPcs.(Kgs)") },
                     modifier = Modifier.fillMaxWidth().weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Phone

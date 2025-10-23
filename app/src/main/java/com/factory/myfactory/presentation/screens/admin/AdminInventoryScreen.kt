@@ -92,182 +92,182 @@ fun AdminInventoryScreen(navHost: NavHostController ,viewModel: CoilViewModel = 
             }
         },
         content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                //.verticalScroll(rememberScrollState())
-            ){
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ){
-                    Card(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.Green.copy(alpha = 0.1f)
-                        )
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(innerPadding)
+//                //.verticalScroll(rememberScrollState())
+//            ){
+//                Row(
+//                    Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 16.dp, vertical = 8.dp),
+//                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+//                ){
+//                    Card(
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
+//                        shape = RoundedCornerShape(10.dp),
+//                        colors = CardDefaults.cardColors(
+//                            containerColor = Color.Green.copy(alpha = 0.1f)
+//                        )
+//
+//                    ){
+//                        Row(
+//                            Modifier.fillMaxSize().padding(8.dp),
+//                            horizontalArrangement = Arrangement.Center,
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Column(
+//                                modifier = Modifier
+//                                    .weight(1f),
+//                                verticalArrangement = Arrangement.Center, // center vertically
+//                            ) {
+//                                Text(
+//                                    text = "${stockList.size}",
+//                                    style = MaterialTheme.typography.headlineLarge,
+//                                    color = MaterialTheme.colorScheme.onSurface,
+//                                    fontWeight = FontWeight.SemiBold
+//                                )
+//                                Text(
+//                                    text = "Total Coil",
+//                                    style = MaterialTheme.typography.titleSmall,
+//                                    color = MaterialTheme.colorScheme.onSurface,
+//                                    fontWeight = FontWeight.Thin
+//                                )
+//                            }
+//
+//                            Icon(
+//                                painter = painterResource(R.drawable.ic_coil),
+//                                contentDescription = "Coil Image",
+//                                tint = Color.Green.copy(alpha = 0.4f),
+//                            )
+//                        }
+//
+//
+//
+//
+//                    }
+//                    Card(
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
+//                        shape = RoundedCornerShape(10.dp),
+//                        colors = CardDefaults.cardColors(
+//                            containerColor = Color.Red.copy(alpha = 0.1f)
+//                        ),
+//
+//
+//                        ){ Row(
+//                        Modifier.fillMaxSize().padding(8.dp),
+//                        horizontalArrangement = Arrangement.Center,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ){
+//                        Column(
+//                            modifier = Modifier
+//                                .weight(1f),
+//                            verticalArrangement = Arrangement.Center, // center vertically
+//                            //horizontalAlignment = Alignment.CenterHorizontally // center horizontally
+//                        ){
+//                            Text(
+//                                text = "$totalWeight",
+//                                style = MaterialTheme.typography.headlineLarge,
+//                                color = MaterialTheme.colorScheme.onSurface,
+//                                fontWeight = FontWeight.SemiBold
+//                            )
+//                            Text(
+//                                text = "Total Weight" ,
+//                                style = MaterialTheme.typography.titleSmall,
+//                                color = MaterialTheme.colorScheme.onSurface,
+//                                fontWeight = FontWeight.Thin
+//                            )
+//                        }
+//
+//                        Icon(
+//                            painter = painterResource(R.drawable.ic_weight),
+//                            contentDescription = "Coil Image",
+//                            tint = Color.Red.copy(alpha = 0.4f),
+//                        )
+//
+//                    }
+//
+//
+//                    }
+//
+//                }
+//
+//                if(!tableView) {
+//
+//                    LazyColumn(
+//                        modifier = Modifier.fillMaxSize(),
+//                        contentPadding = PaddingValues(8.dp),
+//                        verticalArrangement = Arrangement.spacedBy(8.dp)
+//                    ) {
+//                        items(stockList) { stockItemWithId ->
+//                            ListViewCard(
+//                                stockItemWithId = stockItemWithId, // actual data
+//                                viewModel = viewModel ,// pass full object (for id on delete)
+//                                navHost = navHost
+//                            )
+//                        }
+//
+//                    }
+//                } else {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(horizontal = 8.dp, vertical = 4.dp),
+//                        horizontalArrangement = Arrangement.SpaceEvenly,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            text = "Size",
+//                            style = MaterialTheme.typography.bodyMedium,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                        Text(
+//                            text = "Gauge",
+//                            style = MaterialTheme.typography.bodyMedium,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                        Text(
+//                            text = "Grade",
+//                            style = MaterialTheme.typography.bodyMedium,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                        Text(
+//                            text = "Weight\n"+"(KGs)",
+//                            style = MaterialTheme.typography.bodyMedium,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                        Text(
+//                            text = "Status",
+//                            style = MaterialTheme.typography.bodyMedium,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                    }
+//
+//                    LazyColumn(
+//                        modifier = Modifier.fillMaxSize(),
+//                        contentPadding = PaddingValues(vertical = 8.dp),
+//                        verticalArrangement = Arrangement.spacedBy(8.dp)
+//                    ) {
+//                        items(stockList) { stockItemWithId ->
+//                            TableViewCard(
+//                                stockItemWithId = stockItemWithId, // actual data
+//                                viewModel = viewModel ,// pass full object (for id on delete)
+//                                navHost = navHost
+//                            )
+//                        }
+//                    }
+//
+//
+//                }
+//
+//
 
-                    ){
-                        Row(
-                            Modifier.fillMaxSize().padding(8.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f),
-                                verticalArrangement = Arrangement.Center, // center vertically
-                            ) {
-                                Text(
-                                    text = "${stockList.size}",
-                                    style = MaterialTheme.typography.headlineLarge,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                Text(
-                                    text = "Total Coil",
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = FontWeight.Thin
-                                )
-                            }
 
-                            Icon(
-                                painter = painterResource(R.drawable.ic_coil),
-                                contentDescription = "Coil Image",
-                                tint = Color.Green.copy(alpha = 0.4f),
-                            )
-                        }
-
-
-
-
-                    }
-                    Card(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.Red.copy(alpha = 0.1f)
-                        ),
-
-
-                        ){ Row(
-                        Modifier.fillMaxSize().padding(8.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Column(
-                            modifier = Modifier
-                                .weight(1f),
-                            verticalArrangement = Arrangement.Center, // center vertically
-                            //horizontalAlignment = Alignment.CenterHorizontally // center horizontally
-                        ){
-                            Text(
-                                text = "$totalWeight",
-                                style = MaterialTheme.typography.headlineLarge,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Text(
-                                text = "Total Weight" ,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.Thin
-                            )
-                        }
-
-                        Icon(
-                            painter = painterResource(R.drawable.ic_weight),
-                            contentDescription = "Coil Image",
-                            tint = Color.Red.copy(alpha = 0.4f),
-                        )
-
-                    }
-
-
-                    }
-
-                }
-
-                if(!tableView) {
-
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(stockList) { stockItemWithId ->
-                            ListViewCard(
-                                stockItemWithId = stockItemWithId, // actual data
-                                viewModel = viewModel ,// pass full object (for id on delete)
-                                navHost = navHost
-                            )
-                        }
-
-                    }
-                } else {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Size",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Gauge",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Grade",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Weight\n"+"(KGs)",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Status",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(stockList) { stockItemWithId ->
-                            TableViewCard(
-                                stockItemWithId = stockItemWithId, // actual data
-                                viewModel = viewModel ,// pass full object (for id on delete)
-                                navHost = navHost
-                            )
-                        }
-                    }
-
-
-                }
-
-
-
-            }
 
         }
     )

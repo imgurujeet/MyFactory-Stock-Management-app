@@ -214,7 +214,7 @@ fun PipeOutflowScreen(navHost: NavHostController,onBack: () -> Unit,viewModel: P
                     options = pipeOptions,
                     selectedOption = pipeSize,
                     onOptionSelected = { pipeSize = it },
-                    modifier = Modifier.weight(1.5f).padding(bottom = 10.dp, end = 10.dp)
+                    modifier = Modifier.weight(1f).padding(bottom = 10.dp, end = 10.dp)
 
                 )
                 val coilOptions = getCoilSizeOptions(pipeType, pipeSize)

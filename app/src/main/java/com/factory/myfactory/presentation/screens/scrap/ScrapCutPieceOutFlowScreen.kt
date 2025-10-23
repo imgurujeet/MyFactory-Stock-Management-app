@@ -166,7 +166,7 @@ fun ScrapCutPieceOutFlowScreen(navHost: NavHostController,onBack : () -> Unit,vi
                             scrapWeight = input
                         }
                     },
-                    label = { Text("Scrap(in Kgs)") },
+                    label = { Text("Scrap(Kgs)") },
                     modifier = Modifier.fillMaxWidth().weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Phone
@@ -184,7 +184,7 @@ fun ScrapCutPieceOutFlowScreen(navHost: NavHostController,onBack : () -> Unit,vi
                             cutPieceWeight = input
                         }
                     },
-                    label = { Text("CutPiece(in Kgs)") },
+                    label = { Text("CutPcs.(Kgs)") },
                     modifier = Modifier.fillMaxWidth().weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Phone

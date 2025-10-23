@@ -1,5 +1,6 @@
 package com.factory.myfactory.presentation.screens.coil
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -51,6 +52,7 @@ import com.factory.myfactory.presentation.screens.coil.viewmodel.CoilViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoilEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: CoilViewModel = hiltViewModel()) {
@@ -64,14 +66,10 @@ fun CoilEntryScreen(navHost: NavHostController,onBack : () -> Unit,viewModel: Co
 
 
 
-
-
-
-
     //inputs
     var size by rememberSaveable { mutableStateOf("") }
     val sizeOptions = listOf(
-        "1/2\"", "5/8\"", "3/4\"", "1\"",
+        "1/2\"", "5/8\"", "3/4\"", "1\"","1.25\"",
         "1.5\"", "2\"", "2.5\"", "3\""
     )
     var guages by rememberSaveable { mutableStateOf("") }

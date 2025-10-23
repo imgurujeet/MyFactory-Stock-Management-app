@@ -35,6 +35,9 @@ fun getApproxPipeWeight(size: String, gauge: String, type: String): Double {
                 "16G" to 11.3, "18G" to 9.0, "20G" to 7.0, "22G" to 6.0,
                 "24G" to 5.0, "26G" to 4.5, "28G" to 3.7
             ),
+//            "2.5\"" to mapOf(
+//
+//            ),
             "3\"" to mapOf(
                 "16G" to 16.5, "18G" to 13.1, "20G" to 10.5, "22G" to 9.0,
                 "24G" to 8.0, "26G" to 6.5, "28G" to 5.6
@@ -69,7 +72,8 @@ fun getApproxPipeWeight(size: String, gauge: String, type: String): Double {
                 "16G" to 11.0, "18G" to 9.0, "20G" to 7.0, "22G" to 6.1,
                 "24G" to 5.2, "26G" to 4.4, "28G" to 3.8
             ),
-            "3\" × 1\"" to mapOf(
+
+            "3 × 1\"" to mapOf(
                 "16G" to 14.5, "18G" to 11.25, "20G" to 8.75, "22G" to 7.5,
                 "24G" to 6.6, "26G" to 5.5, "28G" to 4.6
             ),

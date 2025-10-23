@@ -55,7 +55,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -77,6 +76,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
@@ -179,13 +179,13 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
             ){
                 Card(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
+                        .weight(1f),
+                       // .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
                     shape = RoundedCornerShape(10.dp),
                 ){
                     Row(
-                        Modifier.fillMaxSize().padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        Modifier.padding(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
@@ -201,22 +201,24 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                                 contentDescription = "users Icon",
 
                                 tint = Color(0xEB008D05),
-                                modifier = Modifier.padding(6.dp).size(30.dp)
+                                modifier = Modifier.padding(4.dp).size(24.dp)
                             )
                         }
-                        Column(
+                        Row(
                             modifier = Modifier
                                 .weight(1f),
-                            verticalArrangement = Arrangement.Center, // center vertically
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                            //verticalArrangement = Arrangement.Center, // center vertically
                         ) {
                             Text(
-                                text = "${user.size}",
-                                style = MaterialTheme.typography.headlineLarge,
+                                text = "${user.size} ",
+                                style = MaterialTheme.typography.headlineSmall,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.Medium
                             )
                             Text(
-                                text = "Total Users",
+                                text = " Total Users",
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Thin
@@ -228,13 +230,13 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                 }
                 Card(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
+                        .weight(1f),
+                       // .height(if(isLandscape) screenWidth*0.1f else screenHeight * 0.1f),
                     shape = RoundedCornerShape(10.dp),
 
                     ){ Row(
-                    Modifier.fillMaxSize().padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    Modifier.padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ){
 
@@ -251,23 +253,25 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
                             contentDescription = "active Icon",
 
                             tint = Color(0xFF00A5FF),
-                            modifier = Modifier.padding(6.dp).size(30.dp).size(if (isLandscape) screenWidth * 0.03f else screenHeight * 0.03f)
+                            modifier = Modifier.padding(4.dp).size(24.dp)
                         )
                     }
-                    Column(
+                    Row(
                         modifier = Modifier
                             .weight(1f),
-                        verticalArrangement = Arrangement.Center, // center vertically
-                       // horizontalAlignment = Alignment.CenterHorizontally // center horizontally
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                       // verticalArrangement = Arrangement.Center, // center vertically
+                       //horizontalAlignment = Alignment.CenterHorizontally // center horizontally
                     ){
                         Text(
-                            text = "${user.count { it.active == true }}",
-                            style = MaterialTheme.typography.headlineLarge,
+                            text = "${user.count { it.active == true }} ",
+                            style = MaterialTheme.typography.headlineSmall,
                             color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Active users" ,
+                            text = " Active users" ,
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Thin
@@ -294,7 +298,7 @@ fun AdminDashboardScreen(navHost: NavHostController,onBack : () -> Unit,adminVie
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                modifier = Modifier.fillMaxWidth().height(if (isLandscape) screenWidth * 0.06f else screenHeight * 0.06f),
+                modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = if (isLandscape) screenWidth * 0.06f else screenHeight * 0.06f),
                 placeholder = { Text("Search by name or phone") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null,
                     modifier = Modifier.size(if (isLandscape) 20.dp else 24.dp),

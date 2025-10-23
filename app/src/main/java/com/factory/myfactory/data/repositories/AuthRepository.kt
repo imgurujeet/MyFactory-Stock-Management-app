@@ -78,41 +78,6 @@ class AuthRepository @Inject constructor(
     }
 
 
-//    fun sendOtp(
-//        phoneNumber: String,
-//        activity: Activity,
-//        onCodeSent: () -> Unit,
-//        onVerificationFailed: (String) -> Unit,
-//        onVerificationSuccess: (String) -> Unit // NEW: success callback
-//    ) {
-//        val options = PhoneAuthOptions.newBuilder(auth)
-//            .setPhoneNumber("+91$phoneNumber")
-//            .setTimeout(60L, TimeUnit.SECONDS)
-//            .setActivity(activity)
-//            .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//
-//                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-//                    // Auto-retrieval succeeded, sign in user automatically
-//                    signInWithPhoneAuthCredential(credential) { success, msg ->
-//                        if (success) onVerificationSuccess(msg ?: "Auto Verified")
-//                        else onVerificationFailed(msg ?: "Auto Verification Failed")
-//                    }
-//                }
-//
-//                override fun onVerificationFailed(e: FirebaseException) {
-//                    onVerificationFailed(e.message ?: "Verification Failed")
-//                }
-//
-//                override fun onCodeSent(vid: String, token: PhoneAuthProvider.ForceResendingToken) {
-//                    verificationId = vid
-//                    onCodeSent()
-//                }
-//            })
-//            .build()
-//
-//        PhoneAuthProvider.verifyPhoneNumber(options)
-//    }
-
     fun verifyOtp(
         code: String,
         onResult: (Boolean, String?) -> Unit

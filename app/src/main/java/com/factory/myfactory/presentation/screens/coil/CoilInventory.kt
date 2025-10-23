@@ -1,5 +1,6 @@
 package com.factory.myfactory.presentation.screens.coil
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -61,6 +62,7 @@ import com.factory.myfactory.presentation.components.TableViewCard
 import com.factory.myfactory.presentation.screens.coil.viewmodel.CoilViewModel
 
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltViewModel()) {
@@ -90,6 +92,13 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
 
     // Filtering the stock list based on selected values
     val filteredStock = stockList.filter { item ->
+        val matchesSize = selectedSize.isEmpty() || item.coilStockItem.size == selectedSize
+        val matchesGauge = selectedGauge.isEmpty() || item.coilStockItem.gauge == selectedGauge
+        val matchesGrade = selectedGrade.isEmpty() || item.coilStockItem.grade == selectedGrade
+        matchesSize && matchesGauge && matchesGrade
+    }
+
+    val filteredStockInventory = inventoryStockList.filter { item ->
         val matchesSize = selectedSize.isEmpty() || item.coilStockItem.size == selectedSize
         val matchesGauge = selectedGauge.isEmpty() || item.coilStockItem.gauge == selectedGauge
         val matchesGrade = selectedGrade.isEmpty() || item.coilStockItem.grade == selectedGrade
@@ -362,7 +371,7 @@ fun CoilInventory(navHost: NavHostController ,viewModel: CoilViewModel = hiltVie
                         contentPadding = PaddingValues(vertical = 8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        itemsIndexed(inventoryStockList) { index, stockItem ->
+                        itemsIndexed(filteredStockInventory) { index, stockItem ->
                             TableViewCard(
 //                                stockItemWithId = CoilRepository.CoilStockItemWithId(
 //                                    id = "aggregated_$index", // dummy ID for aggregated items
